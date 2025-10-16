@@ -2,11 +2,14 @@
 
 Real-time IoT sensor data processing pipeline with anomaly detection and web dashboard visualization.
 
-<img src="https://github.com/user-attachments/assets/b8faab88-7746-496b-9f98-158806a7418b" width="600">
 
-<img src="https://github.com/user-attachments/assets/1edf4fb9-df83-4940-a447-795cb7009d5b" width="600">
 
-<img src="https://github.com/user-attachments/assets/189ca213-86ec-4abc-a780-e68f229d1768" width="600">
+<img src="https://github.com/user-attachments/assets/b8faab88-7746-496b-9f98-158806a7418b" width="800">
+
+<img src="https://github.com/user-attachments/assets/1edf4fb9-df83-4940-a447-795cb7009d5b" width="800">
+
+<img src="https://github.com/user-attachments/assets/189ca213-86ec-4abc-a780-e68f229d1768" width="800">
+
 
 
 
