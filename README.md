@@ -1,7 +1,7 @@
 # IoT Streaming Analytics with Kafka, Spark , MongoDB (optional InfluxDB) & Flask (Optionally Grafana)
 
 
-# Real-time IoT sensor data processing pipeline with anomaly detection and web dashboard visualization.
+ Real-time IoT sensor data processing pipeline with anomaly detection and web dashboard visualization.
 
 
 
