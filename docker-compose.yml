@@ -1,0 +1,128 @@
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    container_name: zookeeper
+    networks:
+      - iot-network
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    networks:
+      - iot-network
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "iot-data:1:1"
+      KAFKA_PORT: 9092
+
+  spark-master:
+    image: apache/spark:3.4.0
+    container_name: spark-master
+    ports:
+      - "8081:8080"
+      - "7077:7077"
+    networks:
+      - iot-network
+    environment:
+      SPARK_MODE: master
+    volumes:
+      - ./spark_processor:/app
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+
+  spark-worker:
+    image: apache/spark:3.4.0
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    networks:
+      - iot-network
+    environment:
+      SPARK_MASTER: spark://spark-master:7077
+    volumes:
+      - ./spark_processor:/app
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - iot-network
+    volumes:
+      - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    ports:
+      - "8082:8081"
+    networks:
+      - iot-network
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    depends_on:
+      - mongo
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    networks:
+      - iot-network
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: adminpass
+      DOCKER_INFLUXDB_INIT_ORG: iot-org
+      DOCKER_INFLUXDB_INIT_BUCKET: iot-data
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: my-super-secret-auth-token
+    volumes:
+      - influx-data:/var/lib/influxdb2
+
+  # bridge:
+  #   image: python:3.11-slim
+  #   container_name: bridge
+  #   networks:
+  #     - iot-network
+  #   volumes:
+  #     - ./bridge:/app
+  #   working_dir: /app
+  #   command: sh -c "pip install -r requirements.txt && python mongo_to_influx.py"
+  #   depends_on:
+  #     - mongo
+  #     - influxdb
+
+  flask-dashboard:
+    image: python:3.11-slim
+    container_name: flask-dashboard
+    ports:
+      - "5000:5000"
+    networks:
+      - iot-network
+    volumes:
+      - ./flask_dashboard:/app
+    working_dir: /app
+    command: sh -c "pip install -r requirements.txt && python app.py"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
+  grafana-data:
+  influx-data:
+
+networks:
+  iot-network:
+    driver: bridge

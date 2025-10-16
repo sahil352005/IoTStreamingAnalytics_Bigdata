@@ -1,0 +1,11 @@
+# docker exec spark-master /spark/bin/spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.1,org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 --master spark://spark-master:7077 /app/processor.py
+to run docker
+
+#collapse docker     
+docker-compose down
+
+#rerun docker
+docker-compose up -d
+
+#to run kafka
+python producer/producer.py
