@@ -87,11 +87,13 @@ BDA project/
 ### Flask Dashboard
 - **Port:** `localhost:5000`
 - **Features:**
-  - Real-time temperature charts
-  - Device statistics
-  - Anomaly detection alerts
-  - Data table with filtering
-  - Auto-refresh every 10 seconds
+  - Interactive temperature line charts (Chart.js)
+  - Device distribution pie charts
+  - Anomaly detection bar charts
+  - Real-time statistics cards
+  - Responsive Bootstrap UI
+  - Color-coded data table
+  - Auto-refresh every 15 seconds
 
 ## Data Schema
 
@@ -121,11 +123,12 @@ BDA project/
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /` | Dashboard home page |
+| `GET /` | Modern dashboard with charts |
 | `GET /api/data` | Recent 100 records |
-| `GET /api/stats` | Statistics (total, anomalies, avg temp) |
+| `GET /api/stats` | Statistics (total, anomalies, avg temp, device count) |
 | `GET /api/anomalies` | Anomaly records only |
 | `GET /api/temperature/<device_id>` | Device-specific temperature data |
+| `GET /api/chart-data` | Chart data for visualizations |
 
 ## Anomaly Detection
 
@@ -213,16 +216,19 @@ anomaly_df = processed_df.withColumn(
 ### Dashboard Customization
 - Modify `flask_dashboard/templates/dashboard.html` for UI changes
 - Add new API endpoints in `flask_dashboard/app.py`
-- Use Chart.js for additional visualizations
+- Customize Chart.js visualizations
+- Bootstrap 5 components for responsive design
+- Font Awesome icons for modern UI
 
 ## Technology Stack
 
 - **Streaming:** Apache Kafka
 - **Processing:** Apache Spark (Structured Streaming)
 - **Storage:** MongoDB
-- **Visualization:** Flask + Chart.js
+- **Visualization:** Flask + Chart.js + Bootstrap 5
 - **Orchestration:** Docker Compose
 - **Languages:** Python, JavaScript, HTML/CSS
+- **UI Framework:** Bootstrap 5, Font Awesome icons
 
 ## License
 
